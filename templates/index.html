@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company Info Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6)),
+        url('https://img.freepik.com/free-vector/background-realistic-abstract-technology-particle_23-2148431735.jpg?t=st=1746553035~exp=1746556635~hmac=268b30e2433d1cb9b207a166e1558a32a8a089fff694fe8606d39c8b4970f67d&w=1380') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-control {
+      border-radius: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: #2575fc;
+      border: none;
+      border-radius: 0.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #1a5ed6;
+    }
+
+    .title {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .card-body {
+      background: #fff;
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+      <div class="card p-4">
+        <div class="card-body">
+          <h3 class="text-center mb-4 title">Submit Your Company Info</h3>
+          <form method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" required />
+            </div>
+            <div class="mb-3">
+              <label for="company" class="form-label">Company Name</label>
+              <input type="text" name="company" class="form-control" id="company" placeholder="Your Company" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+          </form>
+
+          {% if email and company %}
+            <script>
+              alert("✅ Mail Sent to {{ email }} with Company Info for {{ company }}");
+            </script>
+            <div class="alert alert-success mt-4 text-center" role="alert">
+              ✅ Submitted: <strong>{{ email }}</strong> at <strong>{{ company }}</strong>
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
