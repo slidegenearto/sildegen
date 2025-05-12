@@ -4,7 +4,8 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (Mail, Attachment, FileContent, FileName, FileType, Disposition)
 from .constants import SEND_GRID_KEY
 
-def send_email_with_attachment(from_email,to_emails,subject,html_content,filepath):
+def send_email_with_attachment(from_email,to_emails,subject,html_content,filepath,company):
+    file_name=company+".pptx"
     message = Mail(
         from_email=from_email,
         to_emails=to_emails,
@@ -18,7 +19,7 @@ def send_email_with_attachment(from_email,to_emails,subject,html_content,filepat
 
         attachedFile = Attachment(
             FileContent(encoded_file),
-            FileName('attachment.pptx'),
+            FileName(file_name),
             FileType('application/pptx'),
             Disposition('attachment')
         )

@@ -9,7 +9,7 @@
   <style>
     body {
       background: linear-gradient(rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6)),
-        url('https://img.freepik.com/free-vector/background-realistic-abstract-technology-particle_23-2148431735.jpg?t=st=1746553035~exp=1746556635~hmac=268b30e2433d1cb9b207a166e1558a32a8a089fff694fe8606d39c8b4970f67d&w=1380') no-repeat center center fixed;
+  url("{{ url_for('static', filename='images/images.png') }}") no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
       display: flex;
@@ -69,7 +69,8 @@
     <div class="col-lg-5 col-md-7 col-sm-10">
       <div class="card p-4">
         <div class="card-body">
-          <h3 class="text-center mb-4 title">Submit Your Company Info</h3>
+            <h3 class="text-center text-muted mb-2">Growth Market And Intelligent Platform</p>
+          <h5 class="text-center mb-4 title">Submit Your Company Info For Generating the Presentation</h5>
           <form method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
@@ -87,7 +88,9 @@
               alert("✅ Mail Sent to {{ email }} with Company Info for {{ company }}");
             </script>
             <div class="alert alert-success mt-4 text-center" role="alert">
-              ✅ Submitted: <strong>{{ email }}</strong> at <strong>{{ company }}</strong>
+              <!-- ✅ Mail Send: <strong>{{ email }}</strong> at <strong>{{ company }}</strong> -->
+              ✅ Mail Send: <strong>Check Spam Folder</strong>
+
             </div>
           {% endif %}
 

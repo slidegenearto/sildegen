@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slide Generation Progress</title>
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background: linear-gradient(rgba(10, 10, 50, 0.7), rgba(0, 0, 0, 0.7)),
+                    url("{{ url_for('static', filename='images/images1.png') }}") no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    #progress-container {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        height: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    #progress-bar {
+        height: 100%;
+        width: 10%;
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        transition: width 0.5s ease;
+    }
+
+    #status-message {
+        font-size: 18px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    </style>
+</head>
+<body>
+
+<h2>Generating slides... Please wait.</h2>
+
+<div id="progress-container">
+    <div id="progress-bar">Starting...</div>
+</div>
+
+<div id="status-message">Checking task status...</div>
+
+<script>
+    console.log("hellooooooooooooooooooooooooooooooooooooooooooo")
+    const taskId = "{{ TASK_ID }}"  // Replace with actual task_id
+    const token = "{{ TOKEN }}"
+    console.log(taskId)
+    console.log(token)        // Replace with actual token
+    const statusUrl = 'https://api.slidespeak.co/api/v1/task_status/'+taskId;
+
+    function updateUI(status,data) {
+        const progress = document.getElementById("progress-bar");
+        const message = document.getElementById("status-message");
+
+        switch (status) {
+            case "STARTED":
+                progress.style.width = "20%";
+                progress.innerText = "Pending...";
+                message.innerText = "Let’s get started — setting things up for you…";
+                break;
+            case "STARTED":
+                progress.style.width = "60%";
+                progress.innerText = "In Progress...";
+                message.innerText = "Structuring your presentation flow…";
+                break;
+            case "SUCCESS":
+                progress.style.width = "100%";
+                progress.innerText = "Completed!";
+                message.innerText = "All set — your PPT is ready to download!";
+                const url=data.task_result.url
+                fetch("/download", {
+               method: "POST",
+               headers:{
+                'Content-Type':'application/json'
+               },
+               body:JSON.stringify({url:url})
+            
+              }).then(response => response.json())
+              .then( data => console.log(url))
+
+               const link = document.createElement('a');
+                link.href = url;
+                link.download = 'filename' || '';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                break;
+            case "FAILURE":
+                progress.style.width = "100%";
+                progress.style.backgroundColor = "red";
+                progress.innerText = "Failed!";
+                message.innerText = "Task failed. Please try again.";
+                break;
+        }
+    }
+
+    function pollTaskStatus() {
+
+
+
+        fetch(statusUrl, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            console.log(data.taskId)
+            const status = data.task_status;
+            console.log(status)
+
+            updateUI(status,data);
+
+            if (status === "SUCCESS" || status === "FAILURE") {
+                // Stop polling
+                return;
+            } else {
+                setTimeout(pollTaskStatus, 3000);  // Poll again after 3 seconds
+            }
+        })
+        .catch(error => {
+            console.error("Polling error:", error);
+            setTimeout(pollTaskStatus, 5000); // Retry after 5 seconds on error
+        });
+
+        
+    }
+
+    // Start polling
+    pollTaskStatus();
+</script>
+
+</body>
+</html>
